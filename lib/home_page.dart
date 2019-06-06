@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter_web/cupertino.dart';
-import 'package:flutter_web/cupertino.dart' as prefix0;
 import 'package:flutter_web/material.dart';
+import 'package:flutter_web/material.dart' as prefix0;
 import 'package:flutter_web/services.dart';
 import 'package:flutter_web_ui/ui.dart';
 
@@ -127,156 +127,165 @@ class _GoogleMapState extends State<GoogleMapPage> with TickerProviderStateMixin
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
     screenHeight = MediaQuery.of(context).size.height;
+    if (screenWidth > standardWidth) {
+      screenWidth = standardWidth;
+    }
+    if (screenHeight > standardHeight) {
+      screenHeight = standardHeight;
+    }
+
     return Scaffold(
-      body: SizedBox(
-        width: screenWidth,
-        height: screenHeight,
-        child: Stack(
-          children: <Widget>[
-            prefix0.Image.asset(
-              "map.png",
-              width: screenWidth,
-              height: screenHeight,
-              fit: BoxFit.cover,
-            ),
-            //explore
-            ExploreWidget(
-              currentExplorePercent: currentExplorePercent,
-              currentSearchPercent: currentSearchPercent,
-              animateExplore: animateExplore,
-              isExploreOpen: isExploreOpen,
-              onVerticalDragUpdate: onExploreVerticalUpdate,
-              onPanDown: () => animationControllerExplore?.stop(),
-            ),
-            //blur
-            // offsetSearch != 0
-            //     ? BackdropFilter(
-            //         filter: ImageFilter.blur(sigmaX: 10 * currentSearchPercent, sigmaY: 10 * currentSearchPercent),
-            //         child: Container(
-            //           color: Colors.white.withOpacity(0.1 * currentSearchPercent),
-            //           width: screenWidth,
-            //           height: screenHeight,
-            //         ),
-            //       )
-            //     : const Padding(
-            //         padding: const EdgeInsets.all(0),
-            //       ),
-            //explore content
-            ExploreContentWidget(
-              currentExplorePercent: currentExplorePercent,
-            ),
-            //recent search
-            RecentSearchWidget(
-              currentSearchPercent: currentSearchPercent,
-            ),
-            //search menu background
-            offsetSearch != 0
-                ? Positioned(
-                    bottom: realH(88),
-                    left: realW((standardWidth - 320) / 2),
-                    width: realW(320),
-                    height: realH(135 * currentSearchPercent),
-                    child: Opacity(
-                      opacity: currentSearchPercent,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(realW(33)), topRight: Radius.circular(realW(33)))),
+      body: Center(
+        child: SizedBox(
+          width: screenWidth,
+          height: screenHeight,
+          child: Stack(
+            children: <Widget>[
+              prefix0.Image.asset(
+                "map.png",
+                width: screenWidth,
+                height: screenHeight,
+                fit: BoxFit.cover,
+              ),
+              //explore
+              ExploreWidget(
+                currentExplorePercent: currentExplorePercent,
+                currentSearchPercent: currentSearchPercent,
+                animateExplore: animateExplore,
+                isExploreOpen: isExploreOpen,
+                onVerticalDragUpdate: onExploreVerticalUpdate,
+                onPanDown: () => animationControllerExplore?.stop(),
+              ),
+              //blur
+              // offsetSearch != 0
+              //     ? BackdropFilter(
+              //         filter: ImageFilter.blur(sigmaX: 10 * currentSearchPercent, sigmaY: 10 * currentSearchPercent),
+              //         child: Container(
+              //           color: Colors.white.withOpacity(0.1 * currentSearchPercent),
+              //           width: screenWidth,
+              //           height: screenHeight,
+              //         ),
+              //       )
+              //     : const Padding(
+              //         padding: const EdgeInsets.all(0),
+              //       ),
+              //explore content
+              ExploreContentWidget(
+                currentExplorePercent: currentExplorePercent,
+              ),
+              //recent search
+              RecentSearchWidget(
+                currentSearchPercent: currentSearchPercent,
+              ),
+              //search menu background
+              offsetSearch != 0
+                  ? Positioned(
+                      bottom: realH(88),
+                      left: realW((standardWidth - 320) / 2),
+                      width: realW(320),
+                      height: realH(135 * currentSearchPercent),
+                      child: Opacity(
+                        opacity: currentSearchPercent,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(realW(33)), topRight: Radius.circular(realW(33)))),
+                        ),
                       ),
+                    )
+                  : const Padding(
+                      padding: const EdgeInsets.all(0),
                     ),
-                  )
-                : const Padding(
-                    padding: const EdgeInsets.all(0),
-                  ),
-            //search menu
-            SearchMenuWidget(
-              currentSearchPercent: currentSearchPercent,
-            ),
-            //search
-            SearchWidget(
-              currentSearchPercent: currentSearchPercent,
-              currentExplorePercent: currentExplorePercent,
-              isSearchOpen: isSearchOpen,
-              animateSearch: animateSearch,
-              onHorizontalDragUpdate: onSearchHorizontalDragUpdate,
-              onPanDown: () => animationControllerSearch?.stop(),
-            ),
-            //search back
-            SearchBackWidget(
-              currentSearchPercent: currentSearchPercent,
-              animateSearch: animateSearch,
-            ),
-            //layer button
-            MapButton(
-              currentExplorePercent: currentExplorePercent,
-              currentSearchPercent: currentSearchPercent,
-              bottom: 243,
-              offsetX: -71,
-              width: 71,
-              height: 71,
-              isRight: false,
-              icon: Icons.layers,
-            ),
-            //directions button
-            MapButton(
-              currentSearchPercent: currentSearchPercent,
-              currentExplorePercent: currentExplorePercent,
-              bottom: 243,
-              offsetX: -68,
-              width: 68,
-              height: 71,
-              icon: Icons.directions,
-              iconColor: Colors.white,
-              gradient: const LinearGradient(colors: [
-                Color(0xFF59C2FF),
-                Color(0xFF1270E3),
-              ]),
-            ),
-            //my_location button
-            MapButton(
-              currentSearchPercent: currentSearchPercent,
-              currentExplorePercent: currentExplorePercent,
-              bottom: 148,
-              offsetX: -68,
-              width: 68,
-              height: 71,
-              icon: Icons.my_location,
-              iconColor: Colors.blue,
-            ),
-            //menu button
-            Positioned(
-              bottom: realH(53),
-              left: realW(-71 * (currentExplorePercent + currentSearchPercent)),
-              child: GestureDetector(
-                onTap: () {
-                  animateMenu(true);
-                },
-                child: Opacity(
-                  opacity: 1 - (currentSearchPercent + currentExplorePercent),
-                  child: Container(
-                    width: realW(71),
-                    height: realH(71),
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(left: realW(17)),
-                    child: Icon(
-                      Icons.menu,
-                      size: realW(34),
+              //search menu
+              SearchMenuWidget(
+                currentSearchPercent: currentSearchPercent,
+              ),
+              //search
+              SearchWidget(
+                currentSearchPercent: currentSearchPercent,
+                currentExplorePercent: currentExplorePercent,
+                isSearchOpen: isSearchOpen,
+                animateSearch: animateSearch,
+                onHorizontalDragUpdate: onSearchHorizontalDragUpdate,
+                onPanDown: () => animationControllerSearch?.stop(),
+              ),
+              //search back
+              SearchBackWidget(
+                currentSearchPercent: currentSearchPercent,
+                animateSearch: animateSearch,
+              ),
+              //layer button
+              MapButton(
+                currentExplorePercent: currentExplorePercent,
+                currentSearchPercent: currentSearchPercent,
+                bottom: 243,
+                offsetX: -71,
+                width: 71,
+                height: 71,
+                isRight: false,
+                icon: Icons.layers,
+              ),
+              //directions button
+              MapButton(
+                currentSearchPercent: currentSearchPercent,
+                currentExplorePercent: currentExplorePercent,
+                bottom: 243,
+                offsetX: -68,
+                width: 68,
+                height: 71,
+                icon: Icons.directions,
+                iconColor: Colors.white,
+                gradient: const LinearGradient(colors: [
+                  Color(0xFF59C2FF),
+                  Color(0xFF1270E3),
+                ]),
+              ),
+              //my_location button
+              MapButton(
+                currentSearchPercent: currentSearchPercent,
+                currentExplorePercent: currentExplorePercent,
+                bottom: 148,
+                offsetX: -68,
+                width: 68,
+                height: 71,
+                icon: Icons.my_location,
+                iconColor: Colors.blue,
+              ),
+              //menu button
+              Positioned(
+                bottom: realH(53),
+                left: realW(-71 * (currentExplorePercent + currentSearchPercent)),
+                child: GestureDetector(
+                  onTap: () {
+                    animateMenu(true);
+                  },
+                  child: Opacity(
+                    opacity: 1 - (currentSearchPercent + currentExplorePercent),
+                    child: Container(
+                      width: realW(71),
+                      height: realH(71),
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.only(left: realW(17)),
+                      child: Icon(
+                        Icons.menu,
+                        size: realW(34),
+                      ),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(realW(36)), topRight: Radius.circular(realW(36))),
+                          boxShadow: [
+                            BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.3), blurRadius: realW(36)),
+                          ]),
                     ),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(realW(36)), topRight: Radius.circular(realW(36))),
-                        boxShadow: [
-                          BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.3), blurRadius: realW(36)),
-                        ]),
                   ),
                 ),
               ),
-            ),
-            //menu
-            MenuWidget(currentMenuPercent: currentMenuPercent, animateMenu: animateMenu),
-          ],
+              //menu
+              MenuWidget(currentMenuPercent: currentMenuPercent, animateMenu: animateMenu),
+            ],
+          ),
         ),
       ),
     );
